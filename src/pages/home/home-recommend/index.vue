@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view v-if="recommends.length>0">
     <!-- 推荐 -->
     <view class="recommends">
       <view class="recommends_item" v-for="item in recommends" :key="item.id">
