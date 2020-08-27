@@ -1,25 +1,32 @@
 <template>
   <view>
     <view>
-      <uni-segmented-control
-        :current="current"
-        :values="items.map(v=>v.title)"
-        @clickItem="onClickItem"
-        style-type="text"
-        active-color="#d4237a"
-      ></uni-segmented-control>
-      <view class="content">
-        <view v-if="current === 0">
-          <home-recommend></home-recommend>
+      <view class="home_tab">
+        <view class="home_tab_title">
+          <view class="home_inner">
+            <uni-segmented-control
+              :current="current"
+              :values="items.map(v=>v.title)"
+              @clickItem="onClickItem"
+              style-type="text"
+              active-color="#d4237a"
+            ></uni-segmented-control>
+          </view>
+          <view class="iconfont iconsearch"></view>
         </view>
-        <view v-if="current === 1">
-          <home-categroy></home-categroy>
-        </view>
-        <view v-if="current === 2">
-          <homenew></homenew>
-        </view>
-        <view v-if="current === 3">
-          <home-album></home-album>
+        <view class="home_content">
+          <view v-if="current === 0">
+            <home-recommend></home-recommend>
+          </view>
+          <view v-if="current === 1">
+            <home-categroy></home-categroy>
+          </view>
+          <view v-if="current === 2">
+            <homenew></homenew>
+          </view>
+          <view v-if="current === 3">
+            <home-album></home-album>
+          </view>
         </view>
       </view>
     </view>
@@ -57,8 +64,31 @@ export default {
         this.current = e.currentIndex;
       }
     }
+  },
+  onLoad(){
+    // this.request({
+    //   url:"http://157.122.54.189:9088/image/v3/homepage/vertical"
+    // })
+    // .then(res=>{
+    //   console.log(res)
+    // })
   }
 };
 </script>
 <style lang="scss" scoped>
+.home_tab {
+  .home_tab_title{
+    position: relative;
+    .home_inner {
+      width: 60%;
+      margin: 0 auto;
+    }
+    .iconsearch {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 5%;
+    }
+  }
+}
 </style>
