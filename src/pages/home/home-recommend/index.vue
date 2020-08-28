@@ -1,5 +1,5 @@
 <template>
-  <view v-if="recommends.length>0">
+  <scroll-view @scrolltolower="handleToLower" class="recommends_view" scroll-y v-if="recommends.length>0">
     <!-- 推荐 -->
     <view class="recommends">
       <view class="recommends_item" v-for="item in recommends" :key="item.id">
@@ -24,7 +24,18 @@
         </view>
       </view>
     </view>
-  </view>
+    <!-- 热门 -->
+    <view class="hot">
+      <view class="hot_title">
+        <text>热门</text>
+      </view>
+      <view class="hot_content">
+        <view class="hot_item" v-for="item in hotList" :key="item.id">
+          <image mode="widthFix" :src="item.thumb"></image>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
 </template>
 
 <script>
@@ -35,29 +46,53 @@ export default {
     return {
       recommends:[],
       monthList:{},
-      hotList:[]
-    };
-  },
-  mounted(){
-    this.request({
-      url:"http://157.122.54.189:9088/image/v3/homepage/vertical",
-      data:{
+      hotList:[],
+      requestData:{
         limit:30,
         order:'hot',
         skip:0
+      },
+      hasMore:true
+    };
+  },
+  mounted(){
+    this.getData();
+  },
+  methods:{
+    handleToLower(){
+      if(this.hasMore){
+        this.requestData.skip+=this.requestData.limit;
+        this.getData();
+      }else {
+        uni.showToast({title:"没有数据了",icon:"none"})
       }
-    })
-    .then(res=>{
-      this.recommends = res.res.homepage[1].items;
-      this.monthList = res.res.homepage[2];
-      this.hotList = res.res.vertical;
-      this.monthList.MM = format(new Date(this.monthList.stime), 'MM');
-      this.monthList.dd = format(new Date(this.monthList.stime), 'dd');
-    })
+    },
+    getData(){
+      this.request({
+        url:"http://157.122.54.189:9088/image/v3/homepage/vertical",
+        data: this.requestData
+      })
+      .then(res=>{
+        if(this.recommends.length === 0) {
+          this.recommends = res.res.homepage[1].items;
+          this.monthList = res.res.homepage[2];
+          this.monthList.MM = format(new Date(this.monthList.stime), 'MM');
+          this.monthList.dd = format(new Date(this.monthList.stime), 'dd');
+        }
+        if(res.res.vertical.length===0) {
+          this.hasMore = false;
+          return;
+        }
+        this.hotList = [...this.hotList, ...res.res.vertical];
+      })
+    }
   }
 }; 
 </script>
 <style lang="scss" scoped>
+.recommends_view {
+  height: calc(100vh - 36px);
+}
 .recommends {
   display: flex;
   flex-wrap: wrap;
@@ -102,6 +137,28 @@ export default {
     .month_content_item{
       width: 33.33%;
       border: 2px solid #fff;
+    }
+  }
+}
+.hot {
+  .hot_title {
+    padding: 20rpx;
+    font-size: 26rpx;
+    font-weight: 600;
+    text {
+      border-left:3px solid $color;
+      padding-left: 15rpx;
+    }
+  }
+  .hot_content {
+    display: flex;
+    flex-wrap: wrap;
+    .hot_item {
+      width: 33.33%;
+      border: 5rpx solid #fff;
+      image {
+
+      }
     }
   }
 }
