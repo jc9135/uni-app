@@ -57,6 +57,9 @@ export default {
   },
   mounted(){
     this.getData();
+    uni.setNavigationBarTitle({
+      title:"推荐"
+    })
   },
   methods:{
     handleToLower(){
