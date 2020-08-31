@@ -2,9 +2,9 @@
   <scroll-view @scrolltolower="handleToLower" class="recommends_view" scroll-y v-if="recommends.length>0">
     <!-- 推荐 -->
     <view class="recommends">
-      <view class="recommends_item" v-for="item in recommends" :key="item.id">
+      <navigator :url="`/pages/album/index?id=${item.target}`" class="recommends_item" v-for="item in recommends" :key="item.id">
         <image mode="widthFix" :src="item.thumb"></image>
-      </view>
+      </navigator>
     </view>
     <!-- 月份 -->
     <view class="month">
@@ -84,6 +84,10 @@ export default {
         }
         if(res.res.vertical.length===0) {
           this.hasMore = false;
+          uni.showToast({
+              title:"没有更多数据了",
+              icon:"none"
+          })
           return;
         }
         this.hotList = [...this.hotList, ...res.res.vertical];

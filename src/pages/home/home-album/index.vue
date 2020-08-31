@@ -1,5 +1,6 @@
 <template>
   <view class="album">
+    <scroll-view class="album_scroll" scroll-y @scrolltolower="handleToLower">
       <view class="album_swiper">
         <swiper autoplay indicator-dots circular>
           <swiper-item v-for="item in bannerList" :key="item.id">
@@ -8,9 +9,9 @@
         </swiper>
       </view>
       <view class="album_list">
-        <view class="album_item" v-for="item in albumList" :key="item.id">
+        <navigator class="album_item" v-for="item in albumList" :key="item.id" :url="`/pages/album/index?id=${item.id}`">
           <view class="album_left">
-            <image :src="item.cover"></image>
+            <image :src="item.cover" mode="aspectFill"></image>
           </view>
           <view class="album_right">
             <view class="album_name">{{item.name}}</view>
@@ -19,8 +20,9 @@
               <view class="album_attention"> + 关注</view>
             </view>
           </view>
-        </view>
+        </navigator>
       </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -36,6 +38,12 @@ export default {
       },
       albumList:[],
       bannerList:[],
+      requestData:{
+        limit:30,
+        order:'hot',
+        skip:0
+      },
+      hasMore:true
     };
   },
   mounted() {
@@ -51,14 +59,38 @@ export default {
         url: "http://157.122.54.189:9088/image/v1/wallpaper/album",
         data: this.requestData
       }).then(res => {
-        this.bannerList = res.res.banner;
-        this.albumList = res.res.album;
+        if(this.bannerList.length === 0) {
+          this.bannerList = res.res.banner;
+        }
+        if(res.res.album.length === 0 ){
+          this.hasMore = false;
+          uni.showToast({
+              title:"没有更多数据了",
+              icon:"none"
+          })
+          return;
+        }
+        this.albumList = [...this.albumList, ...res.res.album];
       });
+    },
+    handleToLower(){
+      if(this.hasMore) {
+        this.requestData.skip += this.requestData.limit;
+        this.getData();
+      }else {
+        uni.showToast({
+          title:"没有数据了",
+          icon:"none"
+        })
+      }
     }
   }
 };
 </script>
 <style lang="scss" scoped>
+.album_scroll {
+  height: calc(100vh - 36px);
+}
 .album_swiper {
   swiper {
     height: calc(750rpx/2.3);
