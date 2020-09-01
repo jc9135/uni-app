@@ -19,15 +19,21 @@
           </view>
       </view>
       <view class="album_bottom">
-          <view class="album_list" v-for="item in wallpaper" :key="item.id">
-              <image mode="widthFix" :src="item.thumb+item.rule.replace('$<Height>',360)"></image>
+          <view class="album_list" v-for="(item,index) in wallpaper" :key="item.id">
+            <go-detail :list="wallpaper" :index="index">
+                <image mode="widthFix" :src="item.thumb+item.rule.replace('$<Height>',360)"></image>
+            </go-detail>
           </view>
       </view>
   </view>
 </template>
 
 <script>
+import goDetail from '@/components/goDetail'
 export default {
+  components:{
+    goDetail
+  },
   data() {
     return {
       requestData: {
@@ -43,8 +49,9 @@ export default {
     };
   },
   onLoad(options) {
-    this.id = options.id;
-    console.log(options)
+    // this.id = options.id;
+    this.id="5d5f8e45e7bce75ae7fb8278";
+    console.log(this.id)
     this.getData();
   },
   onReachBottom(){

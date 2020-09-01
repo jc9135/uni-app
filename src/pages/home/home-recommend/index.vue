@@ -19,8 +19,10 @@
         <view class="month_top_more">更多 > </view>
       </view>
       <view class="month_content">
-        <view class="month_content_item" v-for="item in monthList.items" :key="item.id">
-          <image mode="aspectFill"  :src="item.img+item.rule.replace('$<Height>',360)"></image>
+        <view class="month_content_item" v-for="(item,index) in monthList.items" :key="item.id">
+          <go-detail :list="monthList.items" :index="index">
+            <image mode="aspectFill"  :src="item.img+item.rule.replace('$<Height>',360)"></image>
+          </go-detail>
         </view>
       </view>
     </view>
@@ -30,8 +32,10 @@
         <text>热门</text>
       </view>
       <view class="hot_content">
-        <view class="hot_item" v-for="item in hotList" :key="item.id">
-          <image mode="widthFix" :src="item.thumb"></image>
+        <view class="hot_item" v-for="(item,index) in hotList" :key="item.id">
+          <go-detail :list="hotList" :index="index">
+            <image mode="widthFix" :src="item.thumb"></image>
+          </go-detail>
         </view>
       </view>
     </view>
@@ -40,8 +44,11 @@
 
 <script>
 import { format, compareAsc } from 'date-fns'
+import goDetail from '@/components/goDetail'
 export default {
-  components: {},
+  components: {
+    goDetail
+  },
   data() {
     return {
       recommends:[],
