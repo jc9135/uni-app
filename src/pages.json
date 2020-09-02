@@ -6,6 +6,11 @@
 				"navigationBarTitleText": "专辑详情"
 			}
 		},{
+			"path": "pages/demo/index",
+			"style": {
+				"navigationBarTitleText": "学习触屏事件"
+			}
+		},{
 			"path": "pages/home/index",
 			"style": {
 				"navigationBarTitleText": "首页"
