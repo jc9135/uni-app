@@ -93,6 +93,9 @@
                </view>
            </view>
        </view>
+       <view class="download">
+           <view class="download_btn" @click="handleDownload">下载图片</view>
+       </view>
    </view>
 </template>
 
@@ -163,6 +166,22 @@ export default {
                     icon:"none"
                 })
             }
+        },
+        async handleDownload(){
+            await uni.showLoading({
+                title:"下载中"
+            })
+            const res1 = await uni.downloadFile({ //tempFilePath
+                url:this.imgDetail.img
+            })
+            const {tempFilePath } = res1[1];
+            const res2 = await uni.saveImageToPhotosAlbum({
+                filePath:tempFilePath
+            })
+            uni.hideLoading();
+            uni.showToast({
+                title:"下载成功"
+            })
         }
     }
 
@@ -349,6 +368,23 @@ export default {
 .new {
     .iconpinglun{
         color: aqua!important;
+    }
+}
+.download {
+    height: 120rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .download_btn {
+        width: 90%;
+        height: 70%;
+        background-color: $color;
+        color: #fff;
+        font-size: 34rpx;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 </style>

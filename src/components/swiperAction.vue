@@ -34,7 +34,7 @@ export default {
         return;
       }
       let direction = "";
-      if (Math.abs(endX - this.startX) > 20) {
+      if (Math.abs(endX - this.startX) > 20&&Math.abs(endY - this.startY) < 20) {
         direction = endX - this.startX > 0 ? "right" : "left";
       }else {
           return;

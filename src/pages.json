@@ -1,6 +1,16 @@
 {
 	"pages": [
 		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},{
+			"path": "pages/imgcategory/index",
+			"style": {
+				"navigationBarTitleText": "图片分类"
+			}
+		},{
 			"path": "pages/album/index",
 			"style": {
 				"navigationBarTitleText": "专辑详情"
@@ -9,11 +19,6 @@
 			"path": "pages/demo/index",
 			"style": {
 				"navigationBarTitleText": "学习触屏事件"
-			}
-		},{
-			"path": "pages/home/index",
-			"style": {
-				"navigationBarTitleText": "首页"
 			}
 		},{
 			"path": "pages/imgDetail/index",
