@@ -21,10 +21,10 @@
           <view v-if="current === 1">
             <home-categroy></home-categroy>
           </view>
-          <view v-if="current === 2">
+          <!-- <view v-if="current === 2">
             <homenew></homenew>
-          </view>
-          <view v-if="current === 3">
+          </view> -->
+          <view v-if="current === 2">
             <home-album></home-album>
           </view>
         </view>
@@ -52,10 +52,10 @@ export default {
       items: [
         { title: "推荐" },
         { title: "分类" },
-        { title: "最新" },
+        // { title: "最新" },
         { title: "专辑" }
       ],
-      current: 1
+      current: 0
     };
   },
   methods: {
