@@ -2,16 +2,18 @@
   <view class="video_play">
       <image :src="videoObj.img"></image>
     <view class="video_tool">
-      <view class="iconfont iconshengyin"></view>
-      <view class="iconfont iconzhuanfa"></view>
+      <view :class="['iconfont', muted?'iconjingyin':'iconshengyin']" @click="muted = !muted"></view>
+      <view class="iconfont iconzhuanfa">
+        <button open-type="share"></button>
+      </view>
     </view>
 
     <view class="video_wrap">
-      <video :src="videoObj.video" objectFit="fill"></video>
+      <video :muted="muted" :src="videoObj.video" objectFit="fill"></video>
     </view>
 
     <view class="download">
-      <view class="download_btn">下载高清</view>
+      <view class="download_btn" @click="handleDownLoad">下载高清</view>
     </view>
   </view>
 </template>
@@ -20,7 +22,8 @@
 export default {
   data() {
     return {
-        videoObj:{}
+        videoObj:{},
+        muted:false
     };
   },
   onLoad() {
@@ -31,7 +34,21 @@ export default {
 
   mounted() {},
 
-  methods: {}
+  methods: {
+    async handleDownLoad(){
+      await uni.showLoading({
+        title:"下载中"
+      })
+      const {tempFilePath} = (await uni.downloadFile({
+        url:this.videoObj.video
+      }))[1];
+      await uni.saveVideoToPhotosAlbum({
+        filePath:tempFilePath
+      })
+      uni.hideLoading();
+      await uni.showToast({title:"下载成功"})
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -58,6 +75,15 @@ export default {
         justify-content: center;
         align-items: center;
         margin-right: 20rpx;
+    }
+    .iconzhuanfa{
+      position: relative;
+      button {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+      }
     }
   }
 
